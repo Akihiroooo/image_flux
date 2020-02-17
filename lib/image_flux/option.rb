@@ -31,14 +31,26 @@ class ImageFlux::Option
   attribute :w, :integer, default: nil, aliases: %i[width]
   attribute :h, :integer, default: nil, aliases: %i[height]
   attribute :u, :boolean, default: true, aliases: %i[upscale]
-  attribute :a, :integer, default: 1, aliases: %i[aspect], enum:{
+  attribute :a, :integer, default: 1, aliases: %i[aspect], enum: {
     scale: 0,
     force_scale: 1,
     crop: 2,
     pad: 3
   }
+  attribute :ic, :integer_array, default: nil
   attribute :c, :integer_array, default: nil, aliases: %i[crop]
   attribute :cr, :float_array, default: nil, aliases: %i[]
+  attribute :ig, :integer, default: 4, enum: {
+    top_left: 1,
+    top_center: 2,
+    top_right: 3,
+    middle_left: 4,
+    middle_center: 5,
+    middle_right: 6,
+    bottom_left: 7,
+    bottom_center: 8,
+    bottom_right: 9
+  }
   attribute :g, :integer, default: 4, aliases: %i[gravity], enum: {
     top_left: 1,
     top_center: 2,
@@ -74,7 +86,7 @@ class ImageFlux::Option
     bottom_right: 9
   }
   # output attributes
-  ALLOWED_FORMATS = %w[auto jpg png gif webp:jpeg webp:png]
+  ALLOWED_FORMATS = %w[auto jpg png gif webp:jpeg webp:png].freeze
   attribute :f, :string, default: 'auto', aliases: %i[format] do
     validate do |value|
       "format should be inclusion of #{ALLOWED_FORMATS.join(', ')}" unless ALLOWED_FORMATS.include?(value.to_s)
