@@ -27,5 +27,12 @@ RSpec.describe ImageFlux::Origin do
 
       it { expect(image_url.path).to eq('/c/w=100/small/image.jpg') }
     end
+
+    context 'with escaping comma option' do
+      let(:options) { { w: 100, h: 100 } }
+      subject(:image_url) { origin.image_url(path, options, escape_comma = true) }
+
+      it { expect(image_url.path).to eq('/c/w=100%2Ch=100/image.jpg') }
+    end
   end
 end

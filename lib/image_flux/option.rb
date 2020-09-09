@@ -112,7 +112,7 @@ class ImageFlux::Option
     @values[prefix_attr]
   end
 
-  def to_query(ignore_default: true)
+  def to_query(escape_comma: false)
     errors = []
     queries = @values.to_a.map do |pair|
       attribute = pair.first
@@ -122,6 +122,7 @@ class ImageFlux::Option
     end
     raise ImageFlux::InvalidOptionError, errors.join(', ') unless errors.length.zero?
 
-    queries.reject(&:nil?).join(',')
+    query_separator = escape_comma ? '%2C' : ','
+    queries.reject(&:nil?).join(query_separator)
   end
 end
