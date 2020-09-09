@@ -9,5 +9,11 @@ RSpec.describe ImageFlux::Option do
     subject(:to_query) { option.to_query }
 
     it { is_expected.to eq('w=100,o=0,f=png,a=2,ig=1,ic=0:0:100:100') }
+
+    context 'with escaping comma option' do
+      subject(:to_query) { option.to_query(escape_comma: true) }
+
+      it { is_expected.to eq('w=100%2Co=0%2Cf=png%2Ca=2%2Cig=1%2Cic=0:0:100:100') }
+    end
   end
 end
