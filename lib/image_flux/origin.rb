@@ -18,17 +18,17 @@ class ImageFlux::Origin
     @base_url ||= URI("#{@scheme}://#{@domain}/")
   end
 
-  def image_url(path, options = {})
+  def image_url(path, options = {}, escape_comma = false)
     path = "/#{path}" unless path.start_with?('/')
 
     options = options.merge(sig: sign(path)) if @signing_secret
     opt = ImageFlux::Option.new(options)
 
     path = "#{opt.prefix_path}#{path}" if opt.prefix_path
-    query = opt.to_query
+    query = opt.to_query(escape_comma: escape_comma)
 
     url = base_url.dup
-    url.path = query.length.zero? ? path : "/c/#{opt.to_query}#{path}"
+    url.path = query.length.zero? ? path : "/c/#{query}#{path}"
 
     url
   end
